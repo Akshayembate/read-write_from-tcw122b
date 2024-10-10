@@ -1,21 +1,112 @@
-status.xml file. The format of the command is shown in the table below:
-XML/HTTP API authentication Format
-enabled http://device.ip.address/status.xml?a= uuuu:pppp
-disabled http://device.ip.address/status.xml
-Where uuuu is username and pppp is password. Both parameters are unencrypted.
-The following HTTP commands are supported:
-Command Description
-http://device.ip.address/status.xml?r1=1 Turn Relay 1 ON
-http:// device.ip.address/status.xml?r1=0 Turn Relay 1 OFF
-http://device.ip.address/status.xml?r2=1 Turn Relay 2 ON
-http://device.ip.address/status.xml?r2=0 Turn Relay 2 OFF
-http://device.ip.address/status.xml?tg1=1 Toggle Relay 1 state
-http://device.ip.address/status.xml?pl1=1 Pulse Relay 1
-http://device.ip.address/status.xml?r1=1&r2=1 Turn both relays ON
-http://device.ip.address/status.xml?r1=0&r2=0 Turn both relays OFF
-If XML/HTTP API authentication is enabled, basic access authentication is required to send HTTP
-commands. The format of the commands is shown in the table below (user name=admin,
-pass=admin):
-XML/HTTP API authentication Format
-enabled http://device.ip.address/ status.xml?a= admin:admin&r1=1
-disabled http://device.ip.address/status.xml?r1=1
+
+TCW122B Device Communication and Control
+This project demonstrates how to communicate with a Siemens PLC device using HTTP API and XML. The application allows you to control relays, retrieve status information, and manage digital and analog inputs through HTTP requests and XML responses.
+
+Features
+Relay Control:
+
+Turn on/off specific relays.
+Toggle the state of relays.
+Pulse relays.
+Control both relays simultaneously.
+Status Retrieval:
+
+Fetch status of the device including:
+Analog Inputs
+Digital Inputs
+Relay states
+Sensor data (Temperature, Humidity)
+HTTP Request Handling:
+
+Basic authentication using username and password.
+Fetch device status via XML.
+Parse and display important device metrics (inputs, relays, sensors) using the tinyxml2 library.
+Prerequisites
+CURL: Used for making HTTP requests.
+tinyxml2: XML parsing library to handle and extract data from the XML response.
+C++ Compiler: (e.g., g++) for building the project.
+Project Structure
+
+project/
+│
+├── include/
+│   └── tinyxml2.h           # Header file for the tinyxml2 XML parser
+│
+├── lib/
+│   └── libcurl.a            # CURL library for HTTP requests
+├── main.cpp                 # Main source code for communication and control
+├── tinyxml2.cpp             # Source code for the tinyxml2 XML parser
+├── README.md                # Readme file (this file)
+└── tasks.json               # VSCode tasks for building the project
+Installation and Setup
+Install Required Libraries:
+
+Install libcurl for HTTP communication.
+Install tinyxml2 for XML parsing.
+Download or Clone the Project:
+
+git clone <project-repository-url>
+cd project/
+Compile the Project: The project can be built using the provided tasks.json in VSCode. Make sure the paths to libcurl and tinyxml2 are correctly set in the build configuration.
+
+g++ main.cpp tinyxml2.cpp -o main -I ./include -L ./lib -lcurl -lssl -lcrypto
+Run the Project: After building, run the project executable:
+
+./main
+Usage
+Fetch Device Status
+The program first fetches the current status of the device, including analog inputs, digital inputs, relay states, and sensor data (temperature, humidity).
+
+Relay Control
+Turn Relay ON/OFF: The function control_relay() allows you to turn on or off a specific relay.
+
+Example:
+
+control_relay("192.168.1.2", "admin", "admin", 1, 1); // Turns Relay 1 ON
+Toggle Relay: Use toggle_relay() to toggle the state of a relay.
+
+Example:
+
+toggle_relay("192.168.1.2", "admin", "admin", 1); // Toggles Relay 1
+Pulse Relay: Use pulse_relay() to pulse a relay for a specified duration.
+
+Example:
+
+cpp
+Copy code
+pulse_relay("192.168.1.2", "admin", "admin", 1); // Pulses Relay 1
+Control Both Relays: Use control_both_relays() to control both relays simultaneously.
+
+Example:
+
+control_both_relays("192.168.1.2", "admin", "admin", 1, 1); // Turns both relays ON
+Example Output
+When running the program, you should expect output similar to this:
+
+Fetching status...
+Received XML:
+<?xml version="1.0" encoding="windows-1252"?>
+<Monitor>
+    <Device>TCW122B-CM</Device>
+    <AnalogInput1>12.2V</AnalogInput1>
+    <AnalogInput2>23.8V</AnalogInput2>
+    <DigitalInput1>CLOSED</DigitalInput1>
+    <DigitalInput2>OPEN</DigitalInput2>
+    <Temperature1>22.4°C</Temperature1>
+    <Humidity1>41.8%RH</Humidity1>
+    <Relay1>OFF</Relay1>
+    <Relay2>OFF</Relay2>
+</Monitor>
+
+Device: TCW122B-CM
+Analog Input 1: 12.2V
+Analog Input 2: 23.8V
+Digital Input 1: CLOSED
+Digital Input 2: OPEN
+Temperature 1: 22.4°C
+Humidity 1: 41.8%RH
+Relay 1: OFF
+Relay 2: OFF
+References
+libcurl: libcurl documentation
+tinyxml2: tinyxml2 documentation
