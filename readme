@@ -1,0 +1,21 @@
+status.xml file. The format of the command is shown in the table below:
+XML/HTTP API authentication Format
+enabled http://device.ip.address/status.xml?a= uuuu:pppp
+disabled http://device.ip.address/status.xml
+Where uuuu is username and pppp is password. Both parameters are unencrypted.
+The following HTTP commands are supported:
+Command Description
+http://device.ip.address/status.xml?r1=1 Turn Relay 1 ON
+http:// device.ip.address/status.xml?r1=0 Turn Relay 1 OFF
+http://device.ip.address/status.xml?r2=1 Turn Relay 2 ON
+http://device.ip.address/status.xml?r2=0 Turn Relay 2 OFF
+http://device.ip.address/status.xml?tg1=1 Toggle Relay 1 state
+http://device.ip.address/status.xml?pl1=1 Pulse Relay 1
+http://device.ip.address/status.xml?r1=1&r2=1 Turn both relays ON
+http://device.ip.address/status.xml?r1=0&r2=0 Turn both relays OFF
+If XML/HTTP API authentication is enabled, basic access authentication is required to send HTTP
+commands. The format of the commands is shown in the table below (user name=admin,
+pass=admin):
+XML/HTTP API authentication Format
+enabled http://device.ip.address/ status.xml?a= admin:admin&r1=1
+disabled http://device.ip.address/status.xml?r1=1
